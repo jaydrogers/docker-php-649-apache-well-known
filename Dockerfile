@@ -4,7 +4,7 @@
 
 # Learn more about the Server Side Up PHP Docker Images at:
 # https://serversideup.net/open-source/docker-php/
-FROM serversideup/php:8.2-fpm-apache-v4.3.0 AS base
+FROM serversideup/php:8.2-fpm-apache AS base
 
 ## Uncomment if you need to install additional PHP extensions
 # USER root
@@ -24,10 +24,6 @@ ARG GROUP_ID
 # Switch to root so we can set the user ID and group ID
 USER root
 
-# Trust the self-signed certificate
-COPY .infrastructure/conf/traefik/dev/certificates/local-ca.pem /usr/local/share/ca-certificates/local-ca.crt
-RUN update-ca-certificates
-
 # Set the user ID and group ID for www-data
 RUN docker-php-serversideup-set-id www-data $USER_ID:$GROUP_ID  && \
     docker-php-serversideup-set-file-permissions --owner $USER_ID:$GROUP_ID
@@ -41,6 +37,8 @@ USER www-data
 FROM base AS ci
 
 # Sometimes CI images need to run as root
+# so we set the ROOT user and configure
+# the PHP-FPM pool to run as www-data
 USER root
 
 ############################################
