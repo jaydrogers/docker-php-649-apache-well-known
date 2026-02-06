@@ -28,20 +28,40 @@ This project uses `spin` to build and run the project.
 docker stop $(docker ps -q)
 ```
 
-#### Clone the repository
+#### Clone the repository and change into the project directory
 ```bash
-git clone https://github.com/serversideup/docker-php-issue-649.git
-cd docker-php-issue-649
+git clone https://github.com/jaydrogers/docker-php-649-apache-well-known.git
 ```
-
 #### Copy the `.env.example` file
 ```bash
-cp .env.example .env
+cp docker-php-649-apache-well-known/.env.example docker-php-649-apache-well-known/.env
+```
+
+#### Change permissions to `www-data`
+This is very important if you're running this on a Linux machine. You need the files to be owned by `www-data`.
+
+```bash
+sudo chown -R 33:33 docker-php-649-apache-well-known
+```
+
+#### Change directory into the project
+```bash
+cd docker-php-649-apache-well-known
 ```
 
 #### Install dependencies
 ```bash
 docker compose run --rm php composer install
+```
+
+#### Generate the application key
+```bash
+docker compose run --rm php artisan key:generate
+```
+
+#### Run migrations
+```bash
+docker compose run --rm php artisan migrate
 ```
 
 ### Bring the services up
