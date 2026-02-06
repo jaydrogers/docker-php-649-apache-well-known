@@ -1,27 +1,7 @@
 services:
-  traefik:
-    image: traefik:v3.6
-    ports:
-    - "80:80"
-    - "443:443"
-    volumes:
-      # Mount the Docker socket as read-only so Traefik can listen to events
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./.infrastructure/conf/traefik/dev/traefik.yml:/traefik.yml:ro
-      - ./.infrastructure/conf/traefik/dev/traefik-certs.yml:/traefik-certs.yml
-      - ./.infrastructure/conf/traefik/dev/certificates/:/certificates
-
   php:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - traefik
+    image: serversideup/php:8.2-fpm-apache-v4.3.0
     volumes:
       - .:/var/www/html/
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.laravel.rule=HostRegexp(`localhost`)"
-      - "traefik.http.routers.laravel.entrypoints=web"
-      - "traefik.http.services.laravel.loadbalancer.server.port=8080"
-      - "traefik.http.services.laravel.loadbalancer.server.scheme=http"
+    ports:
+      - "80:8080"
