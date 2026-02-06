@@ -41,12 +41,12 @@ cp .env.example .env
 
 #### Install dependencies
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.dev.yml run --rm php composer install
+docker compose run --rm php composer install
 ```
 
 ### Bring the services up
 ```bash
-./vendor/bin/spin up
+docker compose up
 ```
 
 ### Test the endpoint
