@@ -1,6 +1,6 @@
 services:
   php:
-    image: serversideup/php:8.2-fpm-apache-v4.3.0
+    image: serversideup/php-dev:652-8.2-fpm-apache
     volumes:
       - .:/var/www/html/
     ports:
